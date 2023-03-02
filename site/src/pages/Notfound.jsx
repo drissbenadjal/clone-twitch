@@ -1,7 +1,12 @@
+import { Navbar } from "../components/Navbar";
+
 export const Notfound = () => {
     return (
-        <div>
+        <>
+        <Navbar />
+        <main>
             <h1>Not found</h1>
-        </div>
+        </main>
+        </>
     );
 };
