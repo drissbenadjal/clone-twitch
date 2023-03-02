@@ -1,6 +1,6 @@
 export const Sidebar = () => {
     return (
-        <nav>
+        <nav className="sidebar">
         </nav>
     );
 };

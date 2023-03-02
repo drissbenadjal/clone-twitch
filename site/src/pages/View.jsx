@@ -56,6 +56,7 @@ export const View = () => {
                 <Navbar />
                 <main>
                     <h1>Home</h1>
+                    <Link to="/saku">saku</Link>
                 </main>
             </>
         );
@@ -63,9 +64,11 @@ export const View = () => {
         return (
             <>
                 <Navbar />
-                <main>
+                <main className="stream-container">
                     <Sidebar />
-                        { stream !== null ? <Live name={stream} /> : <></> }
+                        <div className="stream-box">
+                            { stream !== null ? <Live name={stream} /> : <></> }
+                        </div>
                     <Chats />
                 </main>
             </>
