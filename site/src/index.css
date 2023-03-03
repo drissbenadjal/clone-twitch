@@ -193,7 +193,7 @@ code {
 }
 
 .navbar-top ul li button.profil-not-log svg {
-  margin-left: 1px;
+  margin-right: 1px;
   width: 21px;
   height: 24px;
   object-fit: contain;
@@ -216,14 +216,20 @@ code {
   align-items: flex-start;
 }
 
-main {
-  padding: 45px 55px;
+.home-container{
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 50px);
 }
 
-main h1 {
+.home-container h1 {
   font-size: 2rem;
   font-weight: 500;
   margin: 0;
+}
+
+.home-container .home-box {
+  padding: 20px 0 0 20px;
 }
 
 .stream-container {

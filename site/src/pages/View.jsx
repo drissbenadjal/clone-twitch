@@ -21,8 +21,14 @@ export const View = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (getName.length === 0) return;
-        setName(getName);
+        if (getName.length === 0) {
+            window.document.title = "Twitch";
+            return;
+        }
+        if (getName.length > 0) {
+            window.document.title = getName + " - Twitch";
+            setName(getName);
+        }
     }, [getName, navigate]);
         
     //attendre que le nom soit chargé
@@ -66,14 +72,18 @@ export const View = () => {
             });
         }
     }, [name]);
+        
 
     if (getName.length === 0) {
         return (
             <>
                 <Navbar />
-                <main>
-                    <h1>Home</h1>
-                    <Link to="/saku">saku</Link>
+                <main className="home-container">
+                    <Sidebar />
+                    <div className="home-box">
+                        <h1>Home</h1>
+                        <Link to="/saku">saku</Link>
+                    </div>
                 </main>
             </>
         );
