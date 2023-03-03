@@ -23,6 +23,7 @@ code {
 }
 
 .navbar-top {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,6 +31,7 @@ code {
   background-color: #18181B;
   color: #fff;
   height: 50px;
+  box-shadow: 0 1px 2px #101011, 0 0px 2px #101011;
 }
 
 .navbar-top ul {
@@ -264,6 +266,7 @@ code {
 }
 
 .stream-container .stream {
+  position: relative;
   width: 100%;
 }
 
@@ -287,6 +290,78 @@ code {
 
 .stream-container .stream div .offline-screen {
   width: 100%;
+}
+
+.stream-container .stream .stream-ath {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  z-index: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.stream-container .stream .stream-ath:hover {
+  opacity: 1;
+}
+
+.stream-container .stream .stream-ath .stream-ath-top{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 30px;
+  padding-top: 7px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+  z-index: 1;
+}
+
+.stream-container .stream .stream-ath .stream-ath-top p {
+  font-size: 0.83rem;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  letter-spacing: 0.6px;
+  padding: 1.5px 5px 3px 5px;
+  border-radius: 5px;
+}
+
+.stream-container .stream .stream-ath .stream-ath-top p.text-onlive {
+  font-size: 1rem;
+  background-color: #EB0400;
+}
+
+.stream-container .stream .stream-ath .stream-ath-top p.text-offline {
+  background-color: #00000080;
+}
+
+.stream-container .stream .stream-ath .stream-ath-bottom{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  /* gradient du haut vers le bas */
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+  z-index: 1;
 }
 
 .chats-container {

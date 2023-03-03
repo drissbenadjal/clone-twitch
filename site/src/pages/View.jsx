@@ -14,10 +14,8 @@ export const View = () => {
     const [name, setName] = useState(null);
     const [stream, setStream] = useState(null);
     const [offlineScreen, setOfflineScreen] = useState(null);
+    const [isLive, setIsLive] = useState(false);
 
-    //recuperer les parametres de l'url
-
-    //si le nom est vide on envoie vers la page notfound
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,8 +28,7 @@ export const View = () => {
             setName(getName);
         }
     }, [getName, navigate]);
-        
-    //attendre que le nom soit chargé
+    
     useEffect(() => {
         if (name !== null) {
             fetch("http://localhost:3001/api/getstream", {
@@ -72,6 +69,32 @@ export const View = () => {
             });
         }
     }, [name]);
+
+    const checkLiveStatus = () => {
+        fetch("http://localhost:3001/api/getislive", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+            name: name,
+        }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            setIsLive(data.isLive === "true");
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    };
+
+    useEffect(() => {
+        if (name !== null) {
+            const intervalId = setInterval(checkLiveStatus, 2000);
+            return () => clearInterval(intervalId);
+        }
+    });
         
 
     if (getName.length === 0) {
@@ -96,6 +119,16 @@ export const View = () => {
                         <div className="stream-box">
                             <div className="stream">
                                 { stream !== null ? <Live name={stream} offlineScreen={offlineScreen} /> : <></> }
+                                <div className="stream-ath" style={isLive ? {} : {opacity: 1}}>
+                                    <div className="stream-ath-top">
+                                        {
+                                             isLive ? <p className="text-onlive">LIVE</p> : <p className="text-offline">DÉCONNECTÉ(E)</p>
+                                        }
+                                    </div>
+                                    <div className="stream-ath-bottom">
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     <Chats />
