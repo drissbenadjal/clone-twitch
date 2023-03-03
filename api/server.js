@@ -50,6 +50,46 @@ app.post("/api/getstream", (req, res) => {
   );
 });
 
+app.post("/api/getislive", (req, res) => {
+  let name = req.body.name;
+  db.query(
+    "SELECT isLive FROM utilisateurs WHERE pseudo = ?",
+    [name],
+    (err, results) => {
+      if (err) {
+        console.error("Error querying database:", err);
+        res.status(500).json({ isLive: false });
+      } else {
+        if (results.length > 0) {
+          res.status(200).json({ isLive: results[0].isLive });
+        } else {
+          res.status(200).json({ isLive: false });
+        }
+      }
+    }
+  );
+});
+
+app.post("/api/getuserinfos", (req, res) => {
+  let name = req.body.name;
+  db.query(
+    "SELECT pseudo, offlineScreen FROM utilisateurs WHERE pseudo = ?",
+    [name],
+    (err, results) => {
+      if (err) {
+        console.error("Error querying database:", err);
+        res.status(500).json({ pseudo: null, offlineScreen: null });
+      } else {
+        if (results.length > 0) {
+          res.status(200).json({ pseudo: results[0].pseudo, offlineScreen: results[0].offlineScreen });
+        } else {
+          res.status(200).json({ pseudo: null, offlineScreen: null });
+        }
+      }
+    }
+  );
+});
+
 app.listen(3001, () => {
   console.log("Server listening on port 3001");
 });

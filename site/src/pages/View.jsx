@@ -13,6 +13,7 @@ export const View = () => {
 
     const [name, setName] = useState(null);
     const [stream, setStream] = useState(null);
+    const [offlineScreen, setOfflineScreen] = useState(null);
 
     //recuperer les parametres de l'url
 
@@ -47,6 +48,22 @@ export const View = () => {
             .catch((error) => {
                 console.error(error);
             });
+            fetch("http://localhost:3001/api/getuserinfos", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'name': name
+                })
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                setOfflineScreen(data.offlineScreen);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
         }
     }, [name]);
 
@@ -67,7 +84,9 @@ export const View = () => {
                 <main className="stream-container">
                     <Sidebar />
                         <div className="stream-box">
-                            { stream !== null ? <Live name={stream} /> : <></> }
+                            <div className="stream">
+                                { stream !== null ? <Live name={stream} offlineScreen={offlineScreen} /> : <></> }
+                            </div>
                         </div>
                     <Chats />
                 </main>

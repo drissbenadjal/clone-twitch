@@ -46,37 +46,13 @@ function startStream(streamKeys) {
     };
   
     const nms = new NodeMediaServer(config);
-
+  
     nms.on('prePublish', (id, StreamPath, args) => {
-      // console.log(`[${streamKey}] New stream started: ${StreamPath}`);
-      StreamPath = StreamPath.split("/")[2];
-      db.query(
-        `UPDATE utilisateurs SET isLive = ? WHERE streamKey = ?`,
-        ['true', StreamPath],
-        (err, result) => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.log("User is now live!");
-          }
-        }
-      );
+      console.log(`[${streamKey}] New stream started: ${StreamPath}`);
     });
   
     nms.on('donePublish', (id, StreamPath, args) => {
-      // console.log(`[${streamKey}] Stream stopped: ${StreamPath}`);
-      StreamPath = StreamPath.split("/")[2];
-      db.query(
-        `UPDATE utilisateurs SET isLive = ? WHERE streamKey = ?`,
-        ['false', StreamPath],
-        (err, result) => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.log("User is no longer live!");
-          }
-        }
-      );
+      console.log(`[${streamKey}] Stream stopped: ${StreamPath}`);
     });
   
     nms.run();
