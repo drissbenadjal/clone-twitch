@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {ReactFlvPlayer} from 'react-flv-player';
 
 export const Live = ({name, offlineScreen}) => {
@@ -31,13 +31,14 @@ export const Live = ({name, offlineScreen}) => {
         return () => clearInterval(intervalId);
     }, []);
 
+    const videoRef = useRef(null);
     
     return (
         <>
                 { isLive ? <ReactFlvPlayer
+                            ref={videoRef}
                             type="flv"
                             url={url}
-                            isMuted={true}
                             handleError={(err) => {
                                 switch (err) {
                                     case "NetworkError":
