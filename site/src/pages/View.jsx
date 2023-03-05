@@ -22,6 +22,7 @@ export const View = () => {
     const [stream, setStream] = useState(null);
     const [offlineScreen, setOfflineScreen] = useState(null);
     const [isLive, setIsLive] = useState(false);
+    const [streamID, setStreamID] = useState(null);
 
     const navigate = useNavigate();
 
@@ -53,6 +54,7 @@ export const View = () => {
                     navigate("/Notfound");
                 } else {
                     setStream(data.streamKey);
+                    setStreamID(data.id);
                 }
             })
             .catch((error) => {
@@ -106,15 +108,22 @@ export const View = () => {
     const streamRef = useRef(null);
 
     const handleToggleFullScreen = () => {
+        if (stream === null) return;
         if (document.fullscreenElement === null) {
             streamRef.current.requestFullscreen();
             streamRef.current.style.width = "100vw";
+            streamRef.current.style.height = "100vh";
+            streamRef.current.style.display = "flex";
+            streamRef.current.style.alignItems = "center";
+            streamRef.current.style.justifyContent = "center";
         } else {
+            streamRef.current.attributes.removeNamedItem("style");
             document.exitFullscreen();
         }
     }
 
     useEffect(() => {
+        if (stream === null) return;
         streamRef.current.addEventListener("fullscreenchange", () => {
             if (document.fullscreenElement === null) {
                 streamRef.current.style.width = "100%";
@@ -123,19 +132,19 @@ export const View = () => {
         streamRef.current.addEventListener("dblclick", () => {
                 handleToggleFullScreen();
         });
-    }, []);
+    }, [stream]);
 
     const [streamPlay, setStreamPlay] = useState(true);
 
     const handlePauseStream = () => {
-        if (stream == null) return;
+        if (isLive === false) return;
         const video = document.querySelector(".stream video");
         video.pause();
         setStreamPlay(false);
     }
 
     const handlePlayStream = () => {
-        if (stream == null) return;
+        if (isLive === false) return;
         const video = document.querySelector(".stream video");
         video.play();
         setStreamPlay(true);
@@ -145,14 +154,14 @@ export const View = () => {
     const [streamVolume, setStreamVolume] = useState(0);
 
     useEffect(() => {
-        if (stream == null) return;
+        if (isLive === false) return;
         const video = document.querySelector(".stream video");
         video.muted = !video.muted;
         video.volume = streamVolume;
     }, [streamVolume]);
 
     const handleToggleMuteStream = () => {
-        if (stream == null) return;
+        if (isLive === false) return;
         const video = document.querySelector(".stream video");
         video.muted = !video.muted;
         if (video.volume === 0) {
@@ -163,7 +172,7 @@ export const View = () => {
     }
 
     const handleVolumeChange = (e) => {
-        if (stream == null) return;
+        if (isLive === false) return;
         setStreamVolume(e.target.value);
     }
 
@@ -234,7 +243,9 @@ export const View = () => {
                                 </div>
                             </div>
                         </div>
-                    <Chats />
+                        {
+                            streamID !== null ? <Chats streamID={streamID} /> : <></>
+                        }
                 </main>
             </>
         );

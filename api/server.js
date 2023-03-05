@@ -33,17 +33,17 @@ app.get("/ping", (req, res) => {
 app.post("/api/getstream", (req, res) => {
   let name = req.body.name;
   db.query(
-    "SELECT streamKey FROM utilisateurs WHERE pseudo = ?",
+    "SELECT streamKey, id FROM utilisateurs WHERE pseudo = ?",
     [name],
     (err, results) => {
       if (err) {
         console.error("Error querying database:", err);
-        res.status(500).json({ streamKey: null });
+        res.status(500).json({ streamKey: null, id: null });
       } else {
         if (results.length > 0) {
-          res.status(200).json({ streamKey: results[0].streamKey });
+          res.status(200).json({ streamKey: results[0].streamKey, id: results[0].id });
         } else {
-          res.status(200).json({ streamKey: null });
+          res.status(200).json({ streamKey: null, id: null });
         }
       }
     }
@@ -84,6 +84,40 @@ app.post("/api/getuserinfos", (req, res) => {
           res.status(200).json({ pseudo: results[0].pseudo, offlineScreen: results[0].offlineScreen });
         } else {
           res.status(200).json({ pseudo: null, offlineScreen: null });
+        }
+      }
+    }
+  );
+});
+
+app.post("/api/getchatmessages", (req, res) => {
+  let id = req.body.streamid;
+  db.query("SELECT * FROM chat_channel WHERE streamer_id = ?",
+    [id],
+    (err, results) => {
+      if (err) {
+        console.error("Error querying database:", err);
+        res.status(500).json({ messages: null });
+      } else {
+        if (results.length > 0) {
+          db.query("SELECT * FROM utilisateurs WHERE id = ?", [results[0].utilisateur_id], (err, results2) => {
+            if (err) {
+              console.error("Error querying database:", err);
+              res.status(500).json({ messages: null });
+            } else {
+              if (results2.length > 0) {
+                results.forEach(element => {
+                  element.pseudo = results2[0].pseudo;
+                });
+                res.status(200).json({ messages: results });
+              }
+              else {
+                res.status(200).json({ messages: null });
+              }
+            }
+          });
+        } else {
+          res.status(200).json({ messages: null });
         }
       }
     }
