@@ -78,6 +78,38 @@ function startStream(streamKeys) {
         }
       );
     });
+
+    nms.on('postPlay', (id, StreamPath, args) => {
+      StreamPath = StreamPath.split("/")[2];
+      db.query(
+        `UPDATE utilisateurs SET nbViewers = nbViewers + 1 WHERE streamKey = ?`,
+        [StreamPath],
+        (err, result) => {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log("User is now live!");
+          }
+        }
+      );
+    });
+
+    nms.on('donePlay', (id, StreamPath, args) => {
+      StreamPath = StreamPath.split("/")[2];
+      db.query(
+        `UPDATE utilisateurs SET nbViewers = nbViewers - 1 WHERE streamKey = ?`,
+        [StreamPath],
+        (err, result) => {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log("User is no longer live!");
+          }
+        }
+      );
+    });
+      
+
   
     nms.run();
   });
