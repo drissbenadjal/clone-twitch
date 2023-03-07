@@ -124,14 +124,14 @@ export const View = () => {
 
     useEffect(() => {
         if (stream === null) return;
-        streamRef.current.addEventListener("fullscreenchange", () => {
-            if (document.fullscreenElement === null) {
-                streamRef.current.style.width = "100%";
-            }
-        });
         streamRef.current.addEventListener("dblclick", () => {
-                handleToggleFullScreen();
+            handleToggleFullScreen();
         });
+        return () => {
+            streamRef.current.removeEventListener("dblclick", () => {
+                handleToggleFullScreen();
+            });
+        }
     }, [stream]);
 
     const [streamPlay, setStreamPlay] = useState(true);

@@ -124,6 +124,37 @@ app.post("/api/getchatmessages", (req, res) => {
   );
 });
 
+app.post("/api/getstreamerOnline", (req, res) => {
+  if (req.body.number == 0 || req.body.number == null || req.body.number == undefined) {
+  db.query("SELECT id, pseudo FROM utilisateurs WHERE isLive = 'true' ORDER BY RAND() LIMIT 10", (err, results) => {
+    if (err) {
+      console.error("Error querying database:", err);
+      res.status(500).json({ streamers: null });
+    } else {
+      if (results.length > 0) {
+        res.status(200).json({ streamers: results });
+      } else {
+        res.status(200).json({ streamers: null });
+      }
+    }
+  });
+  } else {
+    number = req.body.number;
+    db.query("SELECT id, pseudo FROM utilisateurs WHERE isLive = 'true' ORDER BY RAND() LIMIT ?", [number], (err, results) => {
+      if (err) {
+        console.error("Error querying database:", err);
+        res.status(500).json({ streamers: null });
+      } else {
+        if (results.length > 0) {
+          res.status(200).json({ streamers: results });
+        } else {
+          res.status(200).json({ streamers: null });
+        }
+      }
+    });
+  }
+});
+
 app.listen(3001, () => {
   console.log("Server listening on port 3001");
 });

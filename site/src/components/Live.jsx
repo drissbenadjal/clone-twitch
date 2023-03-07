@@ -3,6 +3,7 @@ import {ReactFlvPlayer} from 'react-flv-player';
 
 export const Live = ({name, offlineScreen}) => {
 
+    const [loaded, setLoaded] = useState(false);
     const [isLive, setIsLive] = useState(false);
 
     const url = "ws://localhost:8000//" + name + ".flv";
@@ -20,6 +21,9 @@ export const Live = ({name, offlineScreen}) => {
         .then((response) => response.json())
         .then((data) => {
             setIsLive(data.isLive === "true");
+            setTimeout(() => {
+                setLoaded(true);
+            }, 100);
         })
         .catch((error) => {
             console.error(error);
@@ -35,31 +39,34 @@ export const Live = ({name, offlineScreen}) => {
     
     return (
         <>
-                { isLive ? <ReactFlvPlayer
-                            ref={videoRef}
-                            type="flv"
-                            url={url}
-                            handleError={(err) => {
-                                switch (err) {
-                                    case "NetworkError":
-                                        console.log("NetworkError");
-                                        break;
-                                    case "MediaError":
-                                        console.log("MediaError");
-                                        break;
-                                    case "FlvError":
-                                        console.log("FlvError");
-                                        break;
-                                    default:
-                                        console.log("UnknownError");
-                                        break;
-                                }
-                            }}
-                            />
-                            :<div>
-                                <img className="offline-screen" src={offlineScreen} alt="" />
-                            </div>
-                        }
+            {
+                loaded ? <></> : <div className="loading-screen"><div className="loading-spinner"></div></div>
+            }
+            { isLive ? <ReactFlvPlayer
+                        ref={videoRef}
+                        type="flv"
+                        url={url}
+                        handleError={(err) => {
+                            switch (err) {
+                                case "NetworkError":
+                                    console.log("NetworkError");
+                                    break;
+                                case "MediaError":
+                                    console.log("MediaError");
+                                    break;
+                                case "FlvError":
+                                    console.log("FlvError");
+                                    break;
+                                default:
+                                    console.log("UnknownError");
+                                    break;
+                            }
+                        }}
+                        />
+                        :<div>
+                            <img className="offline-screen" src={offlineScreen} alt="" />
+                        </div>
+                    }
         </>
     );
 }
