@@ -69,7 +69,7 @@ export const Sidebar = () => {
                         {
                             streamOnlive && streamOnlive.map((streamer) => {
                                 return (
-                                <Link to={streamer.pseudo} className='sidebar-chanel-content-item' key={streamer.id}>
+                                <Link to={`/${streamer.pseudo}`} className='sidebar-chanel-content-item' key={streamer.id}>
                                     <div className="sidebar-chanel-content-item-img">
                                         <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/1975b18f-fa7d-443f-b191-fba08f92f3a2-profile_image-70x70.jpeg" alt="logo" />
                                     </div>

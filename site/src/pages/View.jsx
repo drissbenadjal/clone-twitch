@@ -127,11 +127,6 @@ export const View = () => {
         streamRef.current.addEventListener("dblclick", () => {
             handleToggleFullScreen();
         });
-        return () => {
-            streamRef.current.removeEventListener("dblclick", () => {
-                handleToggleFullScreen();
-            });
-        }
     }, [stream]);
 
     const [streamPlay, setStreamPlay] = useState(true);
